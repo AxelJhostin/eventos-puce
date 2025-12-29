@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import ViewTracker from "@/components/events/ViewTracker";
 import TrackedLink from "@/components/events/TrackedLink";
+import ShareButton from "@/components/events/ShareButton";
 
 // Esta interfaz define qué parámetros recibe la página (el slug de la URL)
 interface PageProps {
@@ -161,9 +162,9 @@ export default async function EventDetailPage({ params }: PageProps) {
 
                 {/* Botón Compartir (Este lo dejamos igual, sin tracking por ahora) */}
                 <div className="mt-4">
-                    <Button variant="outline" className="w-full gap-2 text-slate-600 border-slate-300 hover:bg-slate-50">
-                        <Share2Icon className="w-4 h-4" /> Compartir Evento
-                    </Button>
+                    <div className="mt-4">
+                      <ShareButton title={event.title} slug={event.slug} />
+                    </div>
                 </div>
               </div>
             </div>
