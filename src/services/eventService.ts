@@ -10,24 +10,24 @@ interface GetEventsFilters {
 // Esta función solo se encarga de ir a buscar datos, nada visual
 export async function getAllEvents(filters?: GetEventsFilters): Promise<Event[]> {
   try {
-    // Empezamos con la consulta base
-    let queryText = 'SELECT * FROM events WHERE 1=1';
+    // CAMBIO CLAVE: La consulta base arranca filtrando por estado
+    let queryText = "SELECT * FROM events WHERE status = 'approved'";
     const queryParams: (string | number | null)[] = [];
 
     // 1. Filtro de Búsqueda (Texto)
     if (filters?.search) {
       queryParams.push(`%${filters.search}%`);
-      // Busca en título O en descripción (insensible a mayúsculas/minúsculas con ILIKE)
+      // Usamos queryParams.length para asignar dinámicamente $1, $2, etc.
       queryText += ` AND (title ILIKE $${queryParams.length} OR description ILIKE $${queryParams.length})`;
     }
 
-    // 2. Filtro de Categoría (Ponencia, Feria, etc.)
+    // 2. Filtro de Categoría
     if (filters?.category) {
       queryParams.push(filters.category.toLowerCase());
       queryText += ` AND category = $${queryParams.length}`;
     }
 
-    // 3. Filtro de Ámbito (Nacional, Internacional...)
+    // 3. Filtro de Ámbito
     if (filters?.scope) {
       queryParams.push(filters.scope.toLowerCase());
       queryText += ` AND scope = $${queryParams.length}`;
@@ -61,5 +61,16 @@ export async function getEventById(id: string): Promise<Event | null> {
   } catch (error) {
     console.error('Error fetching event by id:', error);
     return null;
+  }
+}
+
+export async function getAdminEvents(): Promise<Event[]> {
+  try {
+    // CAMBIO SUGERIDO: Ordenar por fecha del evento (descendente = los más lejanos primero, o pon ASC para los más próximos)
+    const res = await pool.query('SELECT * FROM events ORDER BY event_date DESC');
+    return res.rows;
+  } catch (error) {
+    console.error('Error fetching admin events:', error);
+    return [];
   }
 }

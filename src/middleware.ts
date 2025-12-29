@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
   // 1. Definimos qué rutas queremos proteger
-  const protectedPaths = ['/admin', '/nuevo-evento'];
+  const protectedPaths = ['/admin'];
   
   // Verificamos si la URL actual empieza con alguna de las rutas protegidas
   const isProtected = protectedPaths.some((path) => 

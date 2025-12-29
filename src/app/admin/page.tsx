@@ -1,4 +1,4 @@
-import { getAllEvents } from "@/services/eventService";
+import { getAdminEvents } from "@/services/eventService";
 import DeleteEventButton from "@/components/admin/DeleteEventButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
-  const events = await getAllEvents();
+  const events = await getAdminEvents();
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
