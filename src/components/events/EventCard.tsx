@@ -43,7 +43,7 @@ export default function EventCard({ event }: EventCardProps) {
         
         {/* Badge Flotante */}
         <div className="absolute top-3 left-3 flex gap-2">
-           <Badge variant="secondary" className="backdrop-blur-md bg-white/90 text-[#003366] font-bold shadow-sm">
+           <Badge variant="secondary" className="backdrop-blur-md bg-white/90 text-puce-blue font-bold shadow-sm">
               {event.category.toUpperCase()}
            </Badge>
         </div>
@@ -55,12 +55,12 @@ export default function EventCard({ event }: EventCardProps) {
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               {event.scope}
             </span>
-            <span className="text-xs font-medium text-[#EAB308] bg-[#EAB308]/10 px-2 py-1 rounded-full flex items-center gap-1">
+            <span className="text-xs font-medium text-puce-gold bg-puce-gold/10 px-2 py-1 rounded-full flex items-center gap-1">
                <CalendarIcon className="w-3 h-3" />
                {formattedDate}
             </span>
         </div>
-        <CardTitle className="text-xl font-bold text-slate-900 leading-tight group-hover:text-[#003366] transition-colors">
+        <CardTitle className="text-xl font-bold text-slate-900 leading-tight group-hover:text-puce-blue transition-colors">
           {event.title}
         </CardTitle>
       </CardHeader>
@@ -80,7 +80,7 @@ export default function EventCard({ event }: EventCardProps) {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <Button asChild className="w-full bg-[#003366] hover:bg-[#002850] text-white font-semibold">
+        <Button asChild className="w-full bg-puce-blue hover:bg-puce-dark text-white font-semibold">
           <Link href={`/eventos/${event.slug}`} className="flex items-center justify-center gap-2">
             Ver Detalles <ArrowRightIcon className="w-4 h-4" />
           </Link>

@@ -44,6 +44,9 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  --color-puce-gold: #EAB308;    /* El dorado principal */
+  --color-puce-blue: #003366;       /* El azul principal */
+  --color-puce-dark: #002850;   /* Un azul más oscuro para contrastes */
 }
 
 :root {
