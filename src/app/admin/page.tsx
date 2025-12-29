@@ -2,7 +2,7 @@ import { getAdminEvents } from "@/services/eventService";
 import DeleteEventButton from "@/components/admin/DeleteEventButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, EyeIcon, PencilIcon } from "lucide-react";
+import { PlusIcon, EyeIcon, PencilIcon, BarChart3 } from "lucide-react"; // Agregamos BarChart3
 import {
   Table,
   TableBody,
@@ -22,100 +22,119 @@ export default async function AdminPage() {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       
-      {/* Cabecera del Dashboard */}
+      {/* Cabecera del Dashboard con Icono */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-puce-blue">Panel de Administración</h1>
-          <p className="text-slate-500">Gestiona los eventos registrados en la plataforma.</p>
+          <h1 className="text-3xl font-bold text-puce-blue flex items-center gap-2">
+            <BarChart3 className="w-8 h-8 text-puce-gold" />
+            Panel de Control
+          </h1>
+          <p className="text-slate-500">Métricas y gestión de eventos en tiempo real.</p>
         </div>
         <Link href="/nuevo-evento">
-          <Button className="bg-puce-gold text-puce-blue hover:bg-yellow-400 font-bold gap-2">
+          <Button className="bg-puce-gold text-puce-blue hover:bg-yellow-400 font-bold gap-2 shadow-md">
             <PlusIcon className="w-4 h-4" /> Nuevo Evento
           </Button>
         </Link>
       </div>
 
-      {/* Tabla de Datos */}
-      <div className="border border-slate-200 rounded-lg shadow-sm bg-white overflow-hidden">
+      {/* Tabla de Datos + Analytics */}
+      <div className="border border-slate-200 rounded-xl shadow-sm bg-white overflow-hidden">
         <Table>
           <TableHeader className="bg-slate-50">
             <TableRow>
-              <TableHead className="w-[300px]">Título</TableHead>
-              <TableHead>Fecha</TableHead>
-              <TableHead>Categoría</TableHead>
-              <TableHead>Ámbito</TableHead>
-              {/* 👇 NUEVA COLUMNA: ESTADO */}
-              <TableHead>Estado</TableHead> 
+              <TableHead className="w-[250px]">Evento</TableHead>
+              <TableHead>Estado</TableHead>
+              
+              {/* 👇 NUEVAS COLUMNAS DE ANALYTICS (Estilizadas) */}
+              <TableHead className="text-center text-slate-700 font-bold bg-blue-50/50">👁️ Vistas</TableHead>
+              <TableHead className="text-center text-slate-700 font-bold bg-green-50/50">🖱️ Clics</TableHead>
+              <TableHead className="text-center text-slate-700 font-bold">Conv. %</TableHead>
+              
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {events.length > 0 ? (
-              events.map((event) => (
-                <TableRow key={event.id}>
-                  {/* Título y Slug */}
-                  <TableCell className="font-medium text-slate-900">
-                    {event.title}
-                    <div className="text-xs text-slate-400 font-normal">{event.slug}</div>
-                  </TableCell>
-                  
-                  {/* Fecha */}
-                  <TableCell>
-                    {new Date(event.event_date).toLocaleDateString('es-EC')}
-                  </TableCell>
-                  
-                  {/* Categoría */}
-                  <TableCell>
-                    <span className="capitalize px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
-                      {event.category}
-                    </span>
-                  </TableCell>
-                  
-                  {/* Ámbito */}
-                  <TableCell className="capitalize text-slate-600">{event.scope}</TableCell>
+              events.map((event) => {
+                // Lógica de cálculo de conversión dentro del mapeo
+                const conversionRate = event.views > 0 
+                    ? ((event.clicks / event.views) * 100).toFixed(1) 
+                    : "0.0";
+                
+                return (
+                  <TableRow key={event.id} className="hover:bg-slate-50/50 transition-colors">
+                    
+                    {/* 1. Título y Fecha */}
+                    <TableCell className="font-medium text-slate-900">
+                      <div className="truncate max-w-[240px]" title={event.title}>{event.title}</div>
+                      <div className="text-xs text-slate-400 font-normal">{new Date(event.event_date).toLocaleDateString()}</div>
+                    </TableCell>
 
-                  {/* 👇 NUEVA CELDA: ETIQUETA DE ESTADO */}
-                  <TableCell>
-                     <span className={`px-2 py-1 rounded-full text-xs font-bold border ${
-                        event.status === 'approved' 
-                          ? 'bg-green-100 text-green-700 border-green-200' 
-                          : 'bg-yellow-100 text-yellow-700 border-yellow-200'
-                     }`}>
-                        {event.status === 'approved' ? 'PUBLICADO' : 'PENDIENTE'}
-                     </span>
-                  </TableCell>
+                    {/* 2. Estado (Pendiente/Activo) */}
+                    <TableCell>
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold border ${
+                          event.status === 'approved' 
+                            ? 'bg-green-100 text-green-700 border-green-200' 
+                            : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                      }`}>
+                          {event.status === 'approved' ? 'ACTIVO' : 'PENDIENTE'}
+                      </span>
+                    </TableCell>
 
-                  {/* 👇 CELDA DE ACCIONES (Con el nuevo botón StatusButton) */}
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                        
-                        {/* 1. Botón Aprobar/Ocultar */}
-                        <StatusButton eventId={event.id} currentStatus={event.status || 'pending'} />
+                    {/* 3. Columna Vistas */}
+                    <TableCell className="text-center font-mono text-slate-600 bg-blue-50/30">
+                        {event.views || 0}
+                    </TableCell>
 
-                        {/* 2. Botón Ver (web pública) */}
-                        <Link href={`/eventos/${event.slug}`} target="_blank">
-                          <Button variant="outline" size="sm" title="Ver en la web">
-                            <EyeIcon className="w-4 h-4" />
-                          </Button>
-                        </Link>
+                    {/* 4. Columna Clics */}
+                    <TableCell className="text-center font-mono text-slate-600 bg-green-50/30 font-bold">
+                        {event.clicks || 0}
+                    </TableCell>
 
-                        {/* 3. Botón Editar */}
-                        <Link href={`/admin/editar/${event.id}`}>
-                          <Button variant="outline" size="sm" className="text-blue-600 hover:text-blue-700" title="Editar">
-                            <PencilIcon className="w-4 h-4" />
-                          </Button>
-                        </Link>
-                        
-                        {/* 4. Botón Borrar */}
-                        <DeleteEventButton eventId={event.id} eventTitle={event.title} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                    {/* 5. Columna Conversión */}
+                    <TableCell className="text-center">
+                        <span className={`text-xs font-bold px-2 py-1 rounded ${
+                            Number(conversionRate) > 10 ? "bg-green-100 text-green-700" : "text-slate-500 bg-slate-100"
+                        }`}>
+                            {conversionRate}%
+                        </span>
+                    </TableCell>
+
+                    {/* 6. Acciones */}
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                          
+                          {/* Botón Aprobar/Ocultar */}
+                          <StatusButton eventId={event.id} currentStatus={event.status || 'pending'} />
+                          
+                          {/* Botón Ver */}
+                          <Link href={`/eventos/${event.slug}`} target="_blank">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-puce-blue" title="Ver Evento">
+                              <EyeIcon className="w-4 h-4" />
+                            </Button>
+                          </Link>
+
+                          {/* Botón Editar */}
+                          <Link href={`/admin/editar/${event.id}`}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-blue-600" title="Editar">
+                              <PencilIcon className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                          
+                          {/* Botón Borrar (ligeramente más pequeño) */}
+                          <div className="scale-90">
+                             <DeleteEventButton eventId={event.id} eventTitle={event.title} />
+                          </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10 text-slate-500">
-                  No hay eventos registrados.
+                  No hay datos registrados.
                 </TableCell>
               </TableRow>
             )}

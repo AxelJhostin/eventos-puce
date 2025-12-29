@@ -139,3 +139,22 @@ export async function toggleEventStatus(id: string, newStatus: 'approved' | 'pen
     throw new Error('Error al actualizar el estado del evento.');
   }
 }
+
+export async function incrementView(id: string) {
+  try {
+    // Usamos SQL directo para ser atómicos y evitar errores de concurrencia
+    await pool.query('UPDATE events SET views = views + 1 WHERE id = $1', [id]);
+    // No revalidamos path aquí para no recargar la página del usuario y hacerlo lento
+  } catch (error) {
+    console.error('Error incrementing view:', error);
+  }
+}
+
+// 🖱️ Sumar un clic (+1 click)
+export async function incrementClick(id: string) {
+  try {
+    await pool.query('UPDATE events SET clicks = clicks + 1 WHERE id = $1', [id]);
+  } catch (error) {
+    console.error('Error incrementing click:', error);
+  }
+}

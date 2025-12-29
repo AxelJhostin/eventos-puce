@@ -16,6 +16,8 @@ export interface Event {
   social_url: string | null;
   created_at: Date;
   status: 'approved' | 'pending' | string | null;
+  views: number;
+  clicks: number;
 }
 
 export interface GetEventsFilters {

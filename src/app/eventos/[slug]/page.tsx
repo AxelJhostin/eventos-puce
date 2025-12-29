@@ -4,6 +4,8 @@ import { CalendarIcon, MapPinIcon, Share2Icon, ArrowLeftIcon, ClockIcon, Instagr
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import ViewTracker from "@/components/events/ViewTracker";
+import TrackedLink from "@/components/events/TrackedLink";
 
 // Esta interfaz define qué parámetros recibe la página (el slug de la URL)
 interface PageProps {
@@ -29,7 +31,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-slate-50 pb-20">
-      
+      <ViewTracker eventId={event.id} />
       {/* --- HERO SECTION (Imagen y Título) --- */}
       <div className="relative h-[400px] w-full bg-slate-900 overflow-hidden">
         {/* Imagen de fondo con overlay */}
@@ -135,33 +137,35 @@ export default async function EventDetailPage({ params }: PageProps) {
 
                   <div className="pt-4 border-t border-slate-100"></div>
 
-                  <Button className="w-full bg-puce-blue hover:bg-puce-dark text-white font-bold h-12 text-lg shadow-md shadow-blue-900/10">
-                    <a href={event.registration_url || '#'} target="_blank" rel="noopener noreferrer">
+                  <Button asChild className="w-full bg-puce-blue hover:bg-puce-dark text-white font-bold h-12 text-lg shadow-md shadow-blue-900/10 cursor-pointer">
+                    <TrackedLink eventId={event.id} href={event.registration_url || '#'}>
                       Inscribirse Ahora
-                    </a>
+                    </TrackedLink>
                   </Button>
                   
                   <p className="text-xs text-center text-slate-400">
                     * Serás redirigido al formulario oficial
                   </p>
 
+                  {/* 2. BOTÓN DE INSTAGRAM (Con Tracking) */}
                   {event.social_url && (
-                    <Button variant="outline" className="w-full gap-2 border-slate-300 text-slate-700 hover:text-pink-600 hover:border-pink-200 hover:bg-pink-50 font-bold transition-all h-12">
-                      <a href={event.social_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2">
+                    <Button asChild variant="outline" className="w-full gap-2 border-slate-300 text-slate-700 hover:text-pink-600 hover:border-pink-200 hover:bg-pink-50 font-bold transition-all h-12 cursor-pointer">
+                      <TrackedLink eventId={event.id} href={event.social_url} className="flex items-center justify-center w-full gap-2">
                         <Instagram className="w-5 h-5" />
                         Ver Más en Instagram
-                      </a>
+                      </TrackedLink>
                     </Button>
                   )}
                   
                 </div>
+
+                {/* Botón Compartir (Este lo dejamos igual, sin tracking por ahora) */}
+                <div className="mt-4">
+                    <Button variant="outline" className="w-full gap-2 text-slate-600 border-slate-300 hover:bg-slate-50">
+                        <Share2Icon className="w-4 h-4" /> Compartir Evento
+                    </Button>
+                </div>
               </div>
-
-              {/* Botón Compartir */}
-              <Button variant="outline" className="w-full gap-2 text-slate-600 border-slate-300 hover:bg-slate-50">
-                <Share2Icon className="w-4 h-4" /> Compartir Evento
-              </Button>
-
             </div>
           </div>
 
