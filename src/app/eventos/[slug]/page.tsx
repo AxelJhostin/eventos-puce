@@ -75,15 +75,20 @@ export default async function EventDetailPage({ params }: PageProps) {
                 {event.description}
               </p>
               
-              {/* Aquí podrías agregar más secciones estáticas por ahora */}
-              <div className="mt-8 pt-8 border-t border-slate-100">
-                <h3 className="font-bold text-slate-900 mb-2">Requisitos</h3>
-                <ul className="list-disc list-inside text-slate-600 space-y-1">
-                  <li>Ser estudiante activo de la PUCE Manabí.</li>
-                  <li>Registrarse antes de la fecha límite.</li>
-                  <li>Traer laptop propia (si aplica).</li>
-                </ul>
-              </div>
+              {/* Sección Dinámica de Requisitos */}
+              {event.requirements && (
+                <div className="mt-8 pt-8 border-t border-slate-100">
+                  <h3 className="font-bold text-slate-900 mb-2">Requisitos</h3>
+                  <ul className="list-disc list-inside text-slate-600 space-y-1">
+                    {/* Convertimos el texto en una lista separando por saltos de línea o puntos */}
+                    {event.requirements.split(/[\n•.,]+/).map((req: string, index: number) => 
+                      req.trim().length > 0 && (
+                        <li key={index}>{req.trim()}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 

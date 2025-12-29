@@ -6,6 +6,7 @@ export interface Event {
   title: string;
   slug: string;
   description: string | null;
+  requirements: string | null;
   category: EventCategory;
   scope: EventScope;
   event_date: Date;
