@@ -1,6 +1,7 @@
 import { getAllEvents } from '@/services/eventService';
 import EventCard from '@/components/events/EventCard';
-import { Button } from '@/components/ui/button'; // Ejemplo de reuso
+import { Button } from '@/components/ui/button'; 
+import SidebarFilters from '@/components/events/SidebarFilters';
 
 // Esto asegura que la página muestre datos frescos siempre
 export const dynamic = 'force-dynamic';
@@ -59,21 +60,44 @@ export default async function Home() {
       </section>
 
       {/* Grid de Eventos */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10">
-        
-        {events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Aquí ocurre la magia modular: Renderizamos una carta por cada evento */}
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <h3 className="text-xl text-slate-500">No hay eventos activos por el momento.</h3>
-          </div>
-        )}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* COLUMNA IZQUIERDA: Sidebar (Filtros) */}
+          {/* 'lg:w-1/4' significa que ocupará el 25% del ancho en pantallas grandes */}
+          <aside className="w-full lg:w-1/4">
+             {/* Sticky: Hace que el filtro te siga mientras bajas */}
+             <div className="sticky top-24">
+                {/* ⚠️ Importante: Asegúrate de importar SidebarFilters arriba */}
+                <SidebarFilters />
+             </div>
+          </aside>
 
+          {/* COLUMNA DERECHA: Grid de Eventos */}
+          {/* 'lg:w-3/4' significa que ocupará el 75% restante */}
+          <div className="w-full lg:w-3/4">
+            
+            {/* Título de la sección */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-800">Próximos Eventos</h2>
+              <span className="text-sm text-slate-500">{events.length} resultados encontrados</span>
+            </div>
+
+            {events.length > 0 ? (
+              // Cambiamos grid-cols-3 a grid-cols-2 en desktop porque ahora tenemos menos espacio ancho
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {events.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
+                <p className="text-slate-500">No hay eventos que coincidan con tu búsqueda.</p>
+              </div>
+            )}
+          </div>
+
+        </div>
       </section>
     </main>
   );

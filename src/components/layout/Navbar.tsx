@@ -40,9 +40,11 @@ export default function Navbar() {
           <Button variant="ghost" className="hidden md:flex text-slate-600 hover:text-puce-blue hover:bg-blue-50">
             Iniciar Sesión
           </Button>
-          <Button className="bg-puce-gold hover:bg-yellow-500 text-puce-blue font-bold">
-            Registrar Evento
-          </Button>
+          <Link href="/nuevo-evento">
+            <Button className="bg-puce-gold hover:bg-yellow-500 text-puce-blue font-bold shadow-md">
+              Registrar Evento
+            </Button>
+          </Link>
           
           {/* Botón Menú Móvil (Solo visible en celular) */}
           <Button variant="ghost" size="icon" className="md:hidden">

@@ -11,3 +11,13 @@ export async function getAllEvents(): Promise<Event[]> {
     return []; // Retorna lista vacía si falla, para no romper la página
   }
 }
+
+export async function getEventBySlug(slug: string): Promise<Event | null> {
+  try {
+    const res = await pool.query('SELECT * FROM events WHERE slug = $1', [slug]);
+    return res.rows[0] || null;
+  } catch (error) {
+    console.error('Error fetching event by slug:', error);
+    return null;
+  }
+}
