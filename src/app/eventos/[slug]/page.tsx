@@ -2,6 +2,7 @@ import { getEventBySlug } from '@/services/eventService';
 import { notFound } from 'next/navigation';
 import ViewTracker from "@/components/events/ViewTracker";
 import { Metadata } from "next";
+import Script from 'next/script';
 
 // Importamos nuestros nuevos módulos
 import EventHero from "@/components/events/EventHero";
@@ -48,8 +49,48 @@ export default async function EventDetailPage({ params }: PageProps) {
   const formattedDate = new Date(event.event_date).toLocaleDateString('es-EC', dateOptions);
   const formattedTime = new Date(event.event_date).toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' });
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.title,
+    startDate: new Date(event.event_date).toISOString(),
+    endDate: new Date(event.event_date).toISOString(), // Si tuvieras fecha fin, ponla aquí
+    description: event.description,
+    image: [event.image_url || '/logo-puce-azul.png'],
+    location: {
+      '@type': 'Place',
+      name: event.location || 'PUCE Manabí', // Nombre del lugar
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Portoviejo',
+        addressRegion: 'Manabí',
+        addressCountry: 'EC'
+      }
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: 'PUCE Manabí',
+      url: 'https://pucem.edu.ec'
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0', // O el precio si lo tuvieras
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url: event.registration_url || '#'
+    }
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 pb-20">
+
+      <section>
+        <Script
+          id="event-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </section>
       
       <ViewTracker eventId={event.id} />
 
