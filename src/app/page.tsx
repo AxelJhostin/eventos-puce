@@ -61,14 +61,19 @@ export default async function Home({ searchParams }: HomeProps) {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+             {/* Botón 1: Baja al Grid */}
              <Link href="#eventos">
-             <Button size="lg" className="bg-puce-gold text-puce-blue hover:bg-yellow-400 font-bold text-lg px-8 h-14 shadow-lg shadow-puce-gold/20 transition-all hover:scale-105">
-                Explorar Eventos Activos
-             </Button>
+               <Button size="lg" className="bg-puce-gold text-puce-blue hover:bg-yellow-400 font-bold text-lg px-8 h-14 shadow-lg shadow-puce-gold/20 transition-all hover:scale-105">
+                  Explorar Eventos Activos
+               </Button>
              </Link>
-             <Button size="lg" variant="outline" className="text-black border-white hover:bg-white/10 font-bold text-lg px-8 h-14 backdrop-blur-sm transition-all">
-                Saber Más
-             </Button>
+             
+             {/* Botón 2: Va a Admisiones PUCE */}
+             <a href="https://pucem.edu.ec/grado" target="_blank" rel="noopener noreferrer">
+               <Button size="lg" variant="outline" className="text-black border-white hover:bg-white/10 font-bold text-lg px-8 h-14 backdrop-blur-sm transition-all">
+                  Saber Más
+               </Button>
+             </a>
           </div>
         </div>
       </section>

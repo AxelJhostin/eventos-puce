@@ -1,4 +1,5 @@
-import { FacebookIcon, InstagramIcon, TwitterIcon, LinkedinIcon, MapPinIcon, PhoneIcon, MailIcon } from 'lucide-react';
+import Link from "next/link";
+import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -14,48 +15,93 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* COLUMNA 2: Enlaces Rápidos */}
+          {/* COLUMNA 2: Enlaces Rápidos (Con URLs reales) */}
           <div>
             <h3 className="text-white font-bold text-lg mb-4">Accesos Rápidos</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-puce-gold transition-colors">Campus Virtual</a></li>
-              <li><a href="#" className="hover:text-puce-gold transition-colors">Biblioteca</a></li>
-              <li><a href="#" className="hover:text-puce-gold transition-colors">Cronograma Académico</a></li>
-              <li><a href="#" className="hover:text-puce-gold transition-colors">Admisiones</a></li>
+              {/* Usamos Link de Next.js para rutas internas si las tuviéramos, o <a> para externas */}
+              <li>
+                  <a href="https://pucem.edu.ec/" target="_blank" rel="noopener noreferrer" className="hover:text-puce-gold transition-colors">
+                    Web Oficial
+                  </a>
+              </li>
+              <li>
+                  <a href="https://pucem.edu.ec/grado" target="_blank" rel="noopener noreferrer" className="hover:text-puce-gold transition-colors">
+                    Oferta Académica
+                  </a>
+              </li>
+              <li>
+                  {/* Este es el link clave que pediste */}
+                  <a href="https://pucem.edu.ec/grado" target="_blank" rel="noopener noreferrer" className="hover:text-puce-gold transition-colors font-bold text-white">
+                    Admisiones
+                  </a>
+              </li>
+              <li>
+                  <Link href="/admin" className="hover:text-puce-gold transition-colors">
+                    Acceso Administrativo
+                  </Link>
+              </li>
             </ul>
           </div>
 
-          {/* COLUMNA 3: Contacto (Datos Reales) */}
+          {/* COLUMNA 3: Contacto (Con tu número celular y PBX) */}
           <div>
             <h3 className="text-white font-bold text-lg mb-4">Contacto</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
-                <MapPinIcon className="w-5 h-5 text-puce-gold" />
+                <MapPin className="w-5 h-5 text-puce-gold shrink-0" />
                 <span>Campus Portoviejo / Campus Chone</span>
               </li>
+              
+              {/* Teléfono Celular (WhatsApp Link) */}
               <li className="flex items-center gap-2">
-                <PhoneIcon className="w-5 h-5 text-puce-gold" />
+                <Phone className="w-5 h-5 text-puce-gold shrink-0" />
+                <a href="https://wa.me/593999482280" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline">
+                  +593 99 948 2280
+                </a>
+              </li>
+
+              {/* PBX Fijo */}
+              <li className="flex items-center gap-2">
+                <Phone className="w-5 h-5 text-puce-gold shrink-0" />
                 <span>(PBX) 05 3700750</span>
               </li>
+
               <li className="flex items-center gap-2">
-                <MailIcon className="w-5 h-5 text-puce-gold" />
-                <span>info@pucem.edu.ec</span>
+                <Mail className="w-5 h-5 text-puce-gold shrink-0" />
+                <a href="mailto:info@pucem.edu.ec" className="hover:text-white">info@pucem.edu.ec</a>
               </li>
             </ul>
           </div>
 
-          {/* COLUMNA 4: Social */}
+          {/* COLUMNA 4: Social (Con tus links) */}
           <div>
             <h3 className="text-white font-bold text-lg mb-4">Síguenos</h3>
             <div className="flex gap-4">
-              <a href="#" className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all">
-                <FacebookIcon size={20} />
+              <a 
+                href="https://www.facebook.com/pucemanabi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all">
-                <InstagramIcon size={20} />
+              <a 
+                href="https://www.instagram.com/pucemanabi?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all">
-                <LinkedinIcon size={20} />
+              <a 
+                href="#" 
+                className="bg-white/10 p-2 rounded-full hover:bg-puce-gold hover:text-puce-blue transition-all"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -65,7 +111,7 @@ export default function Footer() {
       
       {/* Copyright */}
       <div className="border-t border-white/10 bg-puce-dark py-6 text-center text-sm">
-        <p>© 2025 Pontificia Universidad Católica del Ecuador - Sede Manabí. Todos los derechos reservados.</p>
+        <p>© {new Date().getFullYear()} Pontificia Universidad Católica del Ecuador - Sede Manabí. Todos los derechos reservados.</p>
       </div>
     </footer>
   );
