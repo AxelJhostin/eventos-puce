@@ -53,3 +53,13 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
     return null;
   }
 }
+
+export async function getEventById(id: string): Promise<Event | null> {
+  try {
+    const res = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
+    return res.rows[0] || null;
+  } catch (error) {
+    console.error('Error fetching event by id:', error);
+    return null;
+  }
+}
