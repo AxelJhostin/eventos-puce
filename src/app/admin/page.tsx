@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import StatusButton from "@/components/admin/StatusButton";
 
 // Esto evita que la página se guarde en caché y siempre muestre los datos reales
 export const dynamic = 'force-dynamic';
@@ -43,6 +44,8 @@ export default async function AdminPage() {
               <TableHead>Fecha</TableHead>
               <TableHead>Categoría</TableHead>
               <TableHead>Ámbito</TableHead>
+              {/* 👇 NUEVA COLUMNA: ESTADO */}
+              <TableHead>Estado</TableHead> 
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -50,41 +53,68 @@ export default async function AdminPage() {
             {events.length > 0 ? (
               events.map((event) => (
                 <TableRow key={event.id}>
+                  {/* Título y Slug */}
                   <TableCell className="font-medium text-slate-900">
                     {event.title}
                     <div className="text-xs text-slate-400 font-normal">{event.slug}</div>
                   </TableCell>
+                  
+                  {/* Fecha */}
                   <TableCell>
                     {new Date(event.event_date).toLocaleDateString('es-EC')}
                   </TableCell>
+                  
+                  {/* Categoría */}
                   <TableCell>
                     <span className="capitalize px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
                       {event.category}
                     </span>
                   </TableCell>
+                  
+                  {/* Ámbito */}
                   <TableCell className="capitalize text-slate-600">{event.scope}</TableCell>
-                  <TableCell className="text-right space-x-2">
-                    {/* Botón Ver (lleva a la web pública) */}
-                    <Link href={`/eventos/${event.slug}`} target="_blank">
-                      <Button variant="outline" size="sm">
-                        <EyeIcon className="w-4 h-4" />
-                      </Button>
-                    </Link>
-                    <Link href={`/admin/editar/${event.id}`}>
-                      <Button variant="outline" size="sm" className="text-blue-600 hover:text-blue-700" title="Editar">
-                        {/* Asegúrate de haber importado PencilIcon arriba */}
-                        <PencilIcon className="w-4 h-4" />
-                      </Button>
-                    </Link>
-                    
-                    {/* Botón Borrar (Componente que creamos) */}
-                    <DeleteEventButton eventId={event.id} eventTitle={event.title} />
+
+                  {/* 👇 NUEVA CELDA: ETIQUETA DE ESTADO */}
+                  <TableCell>
+                     <span className={`px-2 py-1 rounded-full text-xs font-bold border ${
+                        event.status === 'approved' 
+                          ? 'bg-green-100 text-green-700 border-green-200' 
+                          : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                     }`}>
+                        {event.status === 'approved' ? 'PUBLICADO' : 'PENDIENTE'}
+                     </span>
+                  </TableCell>
+
+                  {/* 👇 CELDA DE ACCIONES (Con el nuevo botón StatusButton) */}
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                        
+                        {/* 1. Botón Aprobar/Ocultar */}
+                        <StatusButton eventId={event.id} currentStatus={event.status || 'pending'} />
+
+                        {/* 2. Botón Ver (web pública) */}
+                        <Link href={`/eventos/${event.slug}`} target="_blank">
+                          <Button variant="outline" size="sm" title="Ver en la web">
+                            <EyeIcon className="w-4 h-4" />
+                          </Button>
+                        </Link>
+
+                        {/* 3. Botón Editar */}
+                        <Link href={`/admin/editar/${event.id}`}>
+                          <Button variant="outline" size="sm" className="text-blue-600 hover:text-blue-700" title="Editar">
+                            <PencilIcon className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                        
+                        {/* 4. Botón Borrar */}
+                        <DeleteEventButton eventId={event.id} eventTitle={event.title} />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-10 text-slate-500">
+                <TableCell colSpan={6} className="text-center py-10 text-slate-500">
                   No hay eventos registrados.
                 </TableCell>
               </TableRow>

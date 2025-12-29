@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin, MapPin, Phone, Mail } from 'lucide-react';
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -9,7 +10,15 @@ export default function Footer() {
           
           {/* COLUMNA 1: Sobre Nosotros */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-white font-bold text-lg mb-4 uppercase tracking-wider">PUCE Manabí</h3>
+            <div className="mb-4">
+              <Image 
+                src="/logo-puce-azul.png" 
+                alt="Logo PUCE Manabí" 
+                width={180} 
+                height={60}
+                className="h-16 w-auto object-contain" // Ajusta la altura si lo ves muy grande o pequeño
+              />
+            </div>
             <p className="text-sm leading-relaxed text-blue-100">
               Formamos profesionales de excelencia con valores cristianos y humanistas, comprometidos con la transformación de la sociedad.
             </p>

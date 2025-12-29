@@ -123,3 +123,19 @@ export async function updateEvent(id: string, formData: FormData) {
   
   redirect('/admin');
 }
+
+export async function toggleEventStatus(id: string, newStatus: 'approved' | 'pending') {
+  try {
+    // Actualizamos el estado en la base de datos
+    await pool.query('UPDATE events SET status = $1 WHERE id = $2', [newStatus, id]);
+    
+    // Recargamos las páginas para que el cambio se vea al instante
+    revalidatePath('/admin');
+    revalidatePath('/');
+    
+    return { message: 'Estado actualizado correctamente' };
+  } catch (error) {
+    console.error('Error updating status:', error);
+    throw new Error('Error al actualizar el estado del evento.');
+  }
+}

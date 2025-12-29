@@ -8,6 +8,7 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 export default function Navbar() {
   const navLinks = [
@@ -23,14 +24,15 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between">
           
           {/* --- 1. LOGO (Visible siempre) --- */}
-          <Link href="/" className="flex items-center gap-2 group z-50">
-            <div className="bg-puce-blue p-2 rounded-lg text-white group-hover:bg-blue-900 transition-colors">
-               <GraduationCapIcon className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold text-puce-blue leading-none">PUCE</span>
-              <span className="text-xs font-bold text-slate-400 tracking-[0.2em]">MANABÍ</span>
-            </div>
+          <Link href="/" className="flex items-center z-50 transition-opacity hover:opacity-90">
+            <Image 
+              src="/logo-puce.png" 
+              alt="Logo PUCE Manabí" 
+              width={200}  // Un ancho base estimado
+              height={60}  // Una altura base estimada
+              className="h-12 w-auto object-contain" // Esto hace que se ajuste perfecto sin estirarse
+              priority // Carga la imagen rápido porque es importante
+            />
           </Link>
 
           {/* --- 2. MENÚ ESCRITORIO (Solo visible en PC > 768px) --- */}

@@ -9,10 +9,17 @@ export interface Event {
   requirements: string | null;
   category: EventCategory;
   scope: EventScope;
-  event_date: Date;
+  event_date: string | Date;
   location: string | null;
   image_url: string | null;
   registration_url: string | null;
   social_url: string | null;
   created_at: Date;
+  status: 'approved' | 'pending' | string | null;
+}
+
+export interface GetEventsFilters {
+  search?: string;
+  category?: string;
+  scope?: string;
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar"; 
 import Footer from "@/components/layout/Footer"; 
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eventos Académicos - PUCE Manabí",
-  description: "Plataforma oficial de eventos de Ingeniería de Software.",
+  title: "PUCE Manabí - Eventos academicos",
+  description: "Plataforma de gestión de eventos académicos",
 };
 
 export default function RootLayout({
@@ -35,6 +36,7 @@ export default function RootLayout({
         {/* Contenido Principal (Empuja el footer hacia abajo si hay poco contenido) */}
         <div className="flex-1">
           {children}
+          <Toaster richColors position="top-center" />
         </div>
 
         {/* Pie de Página */}
