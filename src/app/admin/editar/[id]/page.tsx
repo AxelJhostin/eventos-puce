@@ -102,6 +102,16 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="social_url">Instagram / Red Social del Evento</Label>
+              <Input 
+                name="social_url" 
+                id="social_url" 
+                placeholder="https://instagram.com/..." 
+                defaultValue={event.social_url || ''}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Descripción</Label>
               <Textarea name="description" defaultValue={event.description || ''} className="min-h-[150px]" required />
             </div>

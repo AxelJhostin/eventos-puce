@@ -24,11 +24,11 @@ export default function Navbar() {
             <Link href="/" className="text-sm font-medium text-slate-600 hover:text-puce-blue transition-colors">
               Inicio
             </Link>
-            {/* Este baja hasta la sección de eventos usando el ID */}
+            {/* Baja a la sección de eventos */}
             <Link href="/#eventos" className="text-sm font-medium text-slate-600 hover:text-puce-blue transition-colors">
               Eventos
             </Link>
-            {/* Enlaces externos a la web oficial */}
+            {/* Links externos */}
             <a href="https://pucem.edu.ec/" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-slate-600 hover:text-puce-blue transition-colors">
               Investigación
             </a>
@@ -39,11 +39,11 @@ export default function Navbar() {
 
           {/* Botones de Acción */}
           <div className="flex items-center gap-4">
-            {/* LOGIN -> Lleva al Admin */}
-            <Link href="/admin" className="hidden md:block text-sm font-bold text-puce-blue hover:underline">
-              Iniciar Sesión
-            </Link>
+            {/* 🗑️ ELIMINADO: El link de "Iniciar Sesión" ya no está aquí */}
             
+            {/* Este botón lo mantenemos si quieres que sea fácil registrar, 
+                pero recuerda que al dar clic pedirá clave de admin ahora. 
+                Si prefieres ocultarlo también, bórralo y entra solo por /admin */}
             <Link href="/nuevo-evento">
               <Button className="bg-puce-gold hover:bg-yellow-500 text-puce-blue font-bold shadow-md hover:scale-105 transition-transform">
                 Registrar Evento

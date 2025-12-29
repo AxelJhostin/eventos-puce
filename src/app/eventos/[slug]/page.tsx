@@ -1,6 +1,6 @@
 import { getEventBySlug } from '@/services/eventService';
 import { notFound } from 'next/navigation';
-import { CalendarIcon, MapPinIcon, Share2Icon, ArrowLeftIcon, ClockIcon } from 'lucide-react';
+import { CalendarIcon, MapPinIcon, Share2Icon, ArrowLeftIcon, ClockIcon, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -144,6 +144,16 @@ export default async function EventDetailPage({ params }: PageProps) {
                   <p className="text-xs text-center text-slate-400">
                     * Serás redirigido al formulario oficial
                   </p>
+
+                  {event.social_url && (
+                    <Button variant="outline" className="w-full gap-2 border-slate-300 text-slate-700 hover:text-pink-600 hover:border-pink-200 hover:bg-pink-50 font-bold transition-all h-12">
+                      <a href={event.social_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2">
+                        <Instagram className="w-5 h-5" />
+                        Ver Más en Instagram
+                      </a>
+                    </Button>
+                  )}
+                  
                 </div>
               </div>
 

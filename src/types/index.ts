@@ -13,5 +13,6 @@ export interface Event {
   location: string | null;
   image_url: string | null;
   registration_url: string | null;
+  social_url: string | null;
   created_at: Date;
 }

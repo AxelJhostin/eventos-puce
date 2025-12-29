@@ -15,15 +15,17 @@ export async function createEvent(formData: FormData) {
     location: formData.get('location') as string,
     image_url: formData.get('image_url') as string,
     registration_url: formData.get('registration_url') as string,
+    social_url: formData.get('social_url') as string, // ✅ Aquí lo capturas
     description: formData.get('description') as string,
     requirements: formData.get('requirements') as string,
   };
 
   // 2. Insertar en la Base de Datos (SQL)
   try {
+    // 👇 CAMBIO 1: Agregué social_url a la lista de columnas y el $11
     const query = `
-      INSERT INTO events (title, slug, category, scope, event_date, location, image_url, registration_url, description, requirements)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      INSERT INTO events (title, slug, category, scope, event_date, location, image_url, registration_url, description, requirements, social_url)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     `;
 
     const values = [
@@ -36,21 +38,21 @@ export async function createEvent(formData: FormData) {
       rawFormData.image_url,
       rawFormData.registration_url,
       rawFormData.description,
-        rawFormData.requirements,
+      rawFormData.requirements,
+      rawFormData.social_url, // 👈 CAMBIO 2: Agregué el valor al array
     ];
 
     await pool.query(query, values);
 
   } catch (error) {
     console.error('Database Error:', error);
-    // En un futuro podríamos devolver el error al usuario
     throw new Error('Error al crear el evento. Verifica que el Slug no esté repetido.');
   }
 
-  // 3. Actualizar la caché (para que el evento aparezca en el Home sin recargar)
+  // 3. Actualizar la caché
   revalidatePath('/');
   
-  // 4. Redirigir al usuario a la página de inicio
+  // 4. Redirigir
   redirect('/');
 }
 
@@ -58,9 +60,8 @@ export async function deleteEvent(id: string) {
   try {
     await pool.query('DELETE FROM events WHERE id = $1', [id]);
     
-    // Recargamos la página para que la tabla se actualice sola
     revalidatePath('/admin');
-    revalidatePath('/'); // También actualizamos el Home por si acaso
+    revalidatePath('/');
     
     return { message: 'Evento eliminado correctamente' };
   } catch (error) {
@@ -79,22 +80,34 @@ export async function updateEvent(id: string, formData: FormData) {
     location: formData.get('location') as string,
     image_url: formData.get('image_url') as string,
     registration_url: formData.get('registration_url') as string,
+    social_url: formData.get('social_url') as string, // ✅ Aquí lo capturas
     description: formData.get('description') as string,
     requirements: formData.get('requirements') as string,
   };
 
   try {
+    // 👇 CAMBIO 3: Agregué social_url = $11 y moví el ID a $12
     const query = `
       UPDATE events 
       SET title = $1, slug = $2, category = $3, scope = $4, event_date = $5, 
-          location = $6, image_url = $7, registration_url = $8, description = $9, requirements = $10
-      WHERE id = $11
+          location = $6, image_url = $7, registration_url = $8, description = $9, 
+          requirements = $10, social_url = $11
+      WHERE id = $12
     `;
 
     const values = [
-      data.title, data.slug, data.category, data.scope, data.event_date,
-      data.location, data.image_url, data.registration_url, data.description, data.requirements,
-      id // <--- El ID va al final
+      data.title, 
+      data.slug, 
+      data.category, 
+      data.scope, 
+      data.event_date,
+      data.location, 
+      data.image_url, 
+      data.registration_url, 
+      data.description, 
+      data.requirements,
+      data.social_url, // 👈 CAMBIO 4: Agregué el valor aquí
+      id // 👈 El ID siempre va al final (ahora es el $12)
     ];
 
     await pool.query(query, values);
@@ -104,7 +117,6 @@ export async function updateEvent(id: string, formData: FormData) {
     throw new Error('Error al actualizar el evento.');
   }
 
-  // Actualizamos todas las rutas donde sale el evento
   revalidatePath('/admin');
   revalidatePath('/');
   revalidatePath(`/eventos/${data.slug}`);

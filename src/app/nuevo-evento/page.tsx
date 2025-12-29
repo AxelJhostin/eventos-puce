@@ -114,6 +114,16 @@ export default function NewEventPage() {
                 <Input name="registration_url" id="registration_url" placeholder="https://forms..." />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="social_url">Instagram / Red Social del Evento</Label>
+                <Input 
+                  name="social_url" 
+                  id="social_url" 
+                  placeholder="https://instagram.com/..." 
+                  // En el archivo de editar, recuerda poner: defaultValue={event.social_url || ''}
+                />
+              </div>
+
               {/* Descripción */}
               <div className="space-y-2">
                 <Label htmlFor="description">Descripción Detallada *</Label>
