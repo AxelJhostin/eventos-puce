@@ -2,13 +2,25 @@ import { getAllEvents } from '@/services/eventService';
 import EventCard from '@/components/events/EventCard';
 import { Button } from '@/components/ui/button'; 
 import SidebarFilters from '@/components/events/SidebarFilters';
+import Link from 'next/link';
 
 // Esto asegura que la página muestre datos frescos siempre
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
-  // 1. Usamos el servicio (Lógica separada de la vista)
-  const events = await getAllEvents();
+interface HomeProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  // 1. Esperamos a que lleguen los parámetros de la URL
+  const params = await searchParams;
+  
+  const search = typeof params.search === 'string' ? params.search : undefined;
+  const category = typeof params.category === 'string' ? params.category : undefined;
+  const scope = typeof params.scope === 'string' ? params.scope : undefined;
+
+  // 2. Pedimos los eventos FILTRADOS a la base de datos
+  const events = await getAllEvents({ search, category, scope });
 
   return (
     <main className="min-h-screen bg-slate-50/50">
@@ -49,9 +61,11 @@ export default async function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+             <Link href="#eventos">
              <Button size="lg" className="bg-puce-gold text-puce-blue hover:bg-yellow-400 font-bold text-lg px-8 h-14 shadow-lg shadow-puce-gold/20 transition-all hover:scale-105">
                 Explorar Eventos Activos
              </Button>
+             </Link>
              <Button size="lg" variant="outline" className="text-black border-white hover:bg-white/10 font-bold text-lg px-8 h-14 backdrop-blur-sm transition-all">
                 Saber Más
              </Button>
